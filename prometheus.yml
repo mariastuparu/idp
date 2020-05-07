@@ -1,0 +1,48 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+  external_labels:
+      monitor: 'codelab-monitor'
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: 
+        - '0.0.0.0:9090'
+
+  - job_name: 'app'
+    static_configs:
+      - targets: 
+        - '0.0.0.0:5000'
+
+  - job_name: 'node resources'
+    dns_sd_configs:
+      - names: ['tasks.node']
+        type: 'A'
+        port: 9100
+    params:
+      collect[]:
+        - cpu
+        - meminfo
+        - diskstats
+        - netdev
+        - netstat
+
+  - job_name: 'node storage'
+    scrape_interval: 1m
+    dns_sd_configs:
+      - names: ['tasks.node']
+        type: 'A'
+        port: 9100
+    params:
+      collect[]:
+        - filefd
+        - filesystem
+        - xfs
+
+  - job_name: 'cadvisor'
+    dns_sd_configs:
+      - names: ['tasks.cadvisor']
+        type: 'A'
+        port: 8080
+

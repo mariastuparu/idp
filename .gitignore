@@ -2,8 +2,8 @@ cum_merge_client
 prometheus_nodes.yml
 prometheus-testapp.ymp
 README
-./grafana/*
-./prometheus/*
+./grafana/
+./prometheus/
 StuparuMariaAndreea_342C3_Etapa2IDP.zip
 StuparuMariaAndreea_342C3_Etapa3IDP.zip
 StuparuMariaAndreea_342C3_ProiectIDP.odt

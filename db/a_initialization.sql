@@ -62,6 +62,7 @@ create table comments(
 	raiting tinyint, 
 	userId int not null,
 	storyId int not null,
+	postDate date,
 	primary key (commentId),
 	foreign key (userId) references users(userId),
 	foreign key (storyId) references stories(storyId)

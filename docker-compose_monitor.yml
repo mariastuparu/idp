@@ -1,0 +1,41 @@
+version: "3"
+services:
+  app:
+    image: mariastuparu/server_app:final_0000_prom
+    hostname: fanfic_app
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    links:
+      - db
+    ports:
+      - "5000:5000"
+    networks:
+      - webnet
+
+  db:
+    image: mysql:5.7
+    ports:
+      - "32000:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/:ro
+      - db_data:/var/lib/mysql
+
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+    networks:
+      - webnet
+
+networks:
+  webnet:
+volumes:
+  db_data: {}

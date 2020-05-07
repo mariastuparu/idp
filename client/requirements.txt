@@ -1,0 +1,5 @@
+http.client
+json
+tkinter
+pillow
+requests

@@ -1,0 +1,71 @@
+version: "3"
+services:
+  app:
+    image: mariastuparu/server_app:final
+    hostname: fanfic_app
+    links:
+      - db
+    ports:
+      - "5000:5000"
+    extra_hosts:
+      - "dockerhost:192.168.0.1"
+    networks:
+      fanfiction:
+        ipv4_address: 192.168.0.5
+
+  client:
+    image: mariastuparu/client_app:final
+    links:
+      - db
+    ports:
+      - "5001:5000"
+    extra_hosts:
+      - "dockerhost:192.168.0.1"
+    networks:
+      fanfiction:
+        ipv4_address: 192.168.0.6
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=$DISPLAY
+
+  admin:
+    image: mariastuparu/admin_app:final
+    links:
+      - db
+    ports:
+      - "5002:5000"
+    extra_hosts:
+      - "dockerhost:192.168.0.1"
+    networks:
+      fanfiction:
+        ipv4_address: 192.168.0.8
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=$DISPLAY
+
+  db:
+    image: mysql:5.7
+    ports:
+      - "32000:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/:ro
+      - db_data:/var/lib/mysql
+    extra_hosts:
+      - "dockerhost:192.168.0.1"
+    networks:
+      fanfiction:
+        ipv4_address: 192.168.0.7
+  
+networks:
+  fanfiction:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.0.0/24
+
+volumes:
+  db_data: {}

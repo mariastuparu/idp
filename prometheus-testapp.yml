@@ -1,0 +1,6 @@
+global:
+  scrape_interval: 10s
+scrape_configs:
+  - job_name: 'fanficapp_app'
+    static_configs:
+      - targets: ['0.0.0.0:5000']
